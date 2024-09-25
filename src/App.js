@@ -6,7 +6,7 @@ import Register from './components/Auth/register';
 import ForgetPassword from './components/Auth/forgotpass';
 import ChangePassword from './components/Auth/changepass';
 import Questions from './components/questions';
-\
+
 function App() {
   return (
     <Router>
