@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import '../../index.css'
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import '../../index.css';
+
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleLogin = (event) => {
     event.preventDefault();
     // Implement your login logic here
     console.log(email, password);
+  };
+
+  const handleRegisterRedirect = () => {
+    navigate('/register'); // Navigate to the registration page
   };
 
   return (
@@ -41,7 +48,9 @@ const LoginPage = () => {
           </div>
           <div className="flex items-baseline justify-between">
             <button type="submit" className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-lg hover:bg-blue-900">Login</button>
-            <a href="#" className="text-sm text-blue-600 hover:underline">Don't have an account?</a>
+            <button type="button" onClick={handleRegisterRedirect} className="text-sm text-blue-600 hover:underline">
+              Don't have an account?
+            </button>
           </div>
         </form>
       </div>
