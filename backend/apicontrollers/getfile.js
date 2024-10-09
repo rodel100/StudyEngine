@@ -5,22 +5,21 @@ import mongoose from 'mongoose';
 
 const fileSchema = new mongoose.Schema({
     name: String,
-    data: Buffer,
-    contentType: String
+    filePath: String
 });
 
 const File = mongoose.model('File', fileSchema);
 
-async function storeFile(req, res) {
+async function uploadFile(req, res) {
     try {
+        if (!req.file) {
+            return res.status(400).send('No file uploaded');
+        }
         const file = new File({
             name: req.file.originalname,
-            data: req.file.buffer,
-            contentType: req.file.mimetype
+            filePath: req.file.path
         });
-
         await file.save();
-
         res.send('File uploaded successfully!');
       } catch (err) {
         console.error('Error uploading file:', err);
@@ -44,4 +43,4 @@ async function getFile(req, res) {
     }
 }
 
-export default {storeFile, getFile}
+export {uploadFile, getFile}
