@@ -1,5 +1,9 @@
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import { GoogleAIFileManager } from '@google/generative-ai/server';
+import fs from 'fs';
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
 const fileManager = new GoogleAIFileManager(process.env.GEMINI_KEY);
@@ -48,12 +52,12 @@ const model = genAI.getGenerativeModel({
 
 async function generateQuestions(req, res, pdffilepath) {
     try {
-        //Change path to textbook you use, will eventually use what is stored in db
+
         const pdfFilePath = pdffilepath;
 
 
         if (!fs.existsSync(pdfFilePath)) {
-            return res.status(404).json({ error: 'PDF file not found' });
+            return "File not found";
         }
 
 
@@ -82,12 +86,12 @@ async function generateQuestions(req, res, pdffilepath) {
 
         const generatedText = result.response.text ? result.response.text() : null;
         const parsedQuestions = JSON.parse(generatedText)
-        console.log('Generated questions:', parsedQuestions);
-        res.json({ questions: parsedQuestions });
+        console.log(parsedQuestions);
+        return parsedQuestions;
     } catch (error) {
-        console.error('Error processing the PDF file:', error);
-        res.status(500).json({ error: 'Failed to process the PDF file' });
+        return error;
     }
 }
+
 
 export { generateQuestions };

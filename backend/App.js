@@ -3,6 +3,7 @@
   import authRouter from './routes/authRouter.js'
   import apiRouter from './routes/apiRouter.js'
   import 'dotenv/config';
+  import { generateQuestions } from './apicontrollers/aiController.js';
 
 
   const app = express()
