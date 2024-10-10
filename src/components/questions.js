@@ -6,20 +6,20 @@ const QuestionsPage = () => {
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   const [allAnswered, setAllAnswered] = useState(false);
-  const [loading, setLoading] = useState(true); // New state for loading
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        setLoading(true); // Set loading to true when fetching starts
+        setLoading(true); 
         const response = await fetch('http://localhost:3000/questions');
         const data = await response.json();
         console.log(data.questions);
         setQuestions(data.questions);
-        setLoading(false); // Set loading to false when fetching is complete
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching questions:', error);
-        setLoading(false); // Set loading to false if there's an error
+        setLoading(false);
       }
     };
     fetchQuestions();
