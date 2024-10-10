@@ -9,8 +9,30 @@ const LoginPage = () => {
 
   const handleLogin = (event) => {
     event.preventDefault();
-    // Implement your login logic here
-    console.log(email, password);
+    fetch(`http://localhost:8000/auth/login`, {
+      mode: 'cors',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ UserName: email, password: password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+        if(data.token){
+        localStorage.setItem('token', data.token)
+        window.location.href = '/dashboard'}
+        else{
+          alert('Invalid username or password')
+      }})
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
+  const handleRegisterRedirect = () => {
+    navigate('/register'); // Navigate to the registration page
   };
 
   const handleRegisterRedirect = () => {
@@ -23,10 +45,10 @@ const LoginPage = () => {
         <h3 className="text-2xl font-bold text-center">Login to your account</h3>
         <form onSubmit={handleLogin}>
           <div className="mt-4">
-            <label className="block" htmlFor="email">Email</label>
+            <label className="block">Username</label>
             <input 
-              type="email" 
-              placeholder="Email" 
+              type="text" 
+              placeholder="Enter your Username" 
               id="email" 
               onChange={(e) => setEmail(e.target.value)}
               required
