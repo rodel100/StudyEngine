@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 const studyGroupSchema = new mongoose.Schema({
     creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],

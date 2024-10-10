@@ -46,9 +46,11 @@ async function loginUser(req, res) {
     }
     console.log(UserName);
     const user = await User.find({ username: UserName });
-    console.log(user[0]);
+    console.log("This is the user console" + user);
+    console.log("this is the user console with array" + user[0]);
+    console.log("this is the userID " + user[0]._id);
     if (user[0] && await bcrypt.compare(password, user[0].password)) {
-      const token = jwt.sign({ userid: user[0].id }, SECRET_KEY, { expiresIn: '1h' });
+      const token = jwt.sign({ userid: user[0]._id }, SECRET_KEY, { expiresIn: '12h' });
       console.log(token);
       res.json({ message: 'Login successful', token });
       console.log('Login successful');

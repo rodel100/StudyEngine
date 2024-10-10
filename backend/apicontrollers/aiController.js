@@ -50,7 +50,7 @@ const model = genAI.getGenerativeModel({
     },
 });
 
-async function generateQuestions(req, res, pdffilepath) {
+async function generateQuestions(pdffilepath, numberofquestions) {
     try {
 
         const pdfFilePath = pdffilepath;
@@ -79,14 +79,11 @@ async function generateQuestions(req, res, pdffilepath) {
                 },
             },
             {
-                text: 'Generate 10 multiple choice questions that test understanding of the core concepts and ideas presented in the textbook chapter. The questions should focus on the underlying principles and theories rather than specific examples or exercises mentioned in the textbook. Provide the questions in JSON format, with id, text, choices (array), answer'
+                text: `Generate ${numberofquestions} multiple choice questions that test understanding of the core concepts and ideas presented in the textbook chapter. The questions should focus on the underlying principles and theories rather than specific examples or exercises mentioned in the textbook. Provide the questions in JSON format, with id, text, choices (array), answer`
             }
         ]);
-
-
         const generatedText = result.response.text ? result.response.text() : null;
         const parsedQuestions = JSON.parse(generatedText)
-        console.log(parsedQuestions);
         return parsedQuestions;
     } catch (error) {
         return error;
