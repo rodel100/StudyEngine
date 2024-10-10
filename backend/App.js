@@ -4,6 +4,7 @@
   import apiRouter from './routes/apiRouter.js'
   import 'dotenv/config';
   import { generateQuestions } from './apicontrollers/aiController.js';
+  import projectController from './apicontrollers/projectController.js';
 
 
   const app = express()
@@ -21,9 +22,12 @@
   .catch(err => console.error('MongoDB connection error:', err));
   app.use('/auth', authRouter)
   app.use('/api', apiRouter)
+  app.use('/api/project', projectController)
   app.get('/', (req, res) => {
     res.send('Simple Study Engine API')
   })
   app.listen(port, () => {
     console.log(`It's on port ${port}`)
-  })  
+  })
+
+  export {app}

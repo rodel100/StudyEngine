@@ -8,17 +8,18 @@ const fileSchema = new mongoose.Schema({
 });
 
 const File = mongoose.model('File', fileSchema);
-async function uploadFile() {
+async function uploadFile(file) {
     try {
-        if (!req.file) {
+        if (!file) {
             return 'No file uploaded';
+            console.log('No file uploaded');
         }
-        const file = new File({
-            name: req.file.originalname,
-            filePath: req.file.path
+        const newFile = new File({
+            name: file.originalname,
+            filePath: file.path
         });
-        await file.save();
-        return file;
+        await newFile.save();
+        return newFile;
       } catch (err) {
         return err;
     }
