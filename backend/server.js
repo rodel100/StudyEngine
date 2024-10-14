@@ -5,14 +5,12 @@ const cors = require('cors');
 const { GoogleGenerativeAI, SchemaType } = require('@google/generative-ai');
 const { GoogleAIFileManager } = require('@google/generative-ai/server');
 
-
 const app = express();
 app.use(cors());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
 const fileManager = new GoogleAIFileManager(process.env.GEMINI_KEY);
 console.log('Gemini Key:', process.env.GEMINI_KEY);
-
 
 const questionSchema = {
     description: "List of multiple choice questions",
