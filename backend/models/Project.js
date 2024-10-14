@@ -20,7 +20,7 @@ const projectSchema = new mongoose.Schema({
     studygroup: { type: mongoose.Schema.Types.ObjectId, ref: 'StudyGroup' },
     emailFrequency: String,
     NumberofQuestions: Number,
-    Questions: [{ Name: String, Question: [questionSchema] }]
+    Questions: [{ Name: String, Question: [questionSchema]}]
 });
 
 const Project = mongoose.model('Project', projectSchema);
