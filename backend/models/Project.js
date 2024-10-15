@@ -14,7 +14,7 @@ const projectSchema = new mongoose.Schema({
     },
     description: String,
     creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    members: [{ Name: String, Email: String}],
     endpoints: [{ type: String }],
     files: [{ type: mongoose.Schema.Types.ObjectId, ref: 'File' }],
     studygroup: { type: mongoose.Schema.Types.ObjectId, ref: 'StudyGroup' },

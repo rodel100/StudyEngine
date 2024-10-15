@@ -124,7 +124,7 @@ projectController.delete('/delete/:id', authenticateToken, async (req, res) => {
 
 projectController.post('/sendEmails/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
-    const frontendUrl = "localhost:3000/project/questionaire";
+    const frontendUrl = `localhost:3000/project/questionaire/${id}`;
     try {
         const project = await Project.findById(id);
 
@@ -132,9 +132,9 @@ projectController.post('/sendEmails/:id', authenticateToken, async (req, res) =>
             return res.status(404).send('Project not found');
         }
 
-        const { studygroup, emailFrequency } = project;
+        const { members, emailFrequency } = project;
 
-        for (const member of studygroup) {
+        for (const member of members) {
             const { email, name } = member;
             const projectLink = `${frontendUrl}?email=${email}&name=${encodeURIComponent(name)}`;
 
