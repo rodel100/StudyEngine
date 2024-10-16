@@ -28,7 +28,7 @@ const RegistrationPage = () => {
             window.location.href = '/';
           })
           .catch((error) => {
-            console.error('Error:', error);
+            alert('error:', error);
           });
       }
       else{alert('Invalid username or password')}
@@ -82,33 +82,6 @@ const RegistrationPage = () => {
             <p className="mt-2 text-xs text-gray-500">
               Password must be at least 8 characters long and contain a number.
             </p>
-          </div>
-          <div className="mt-4">
-            <label htmlFor="frequency" className="block text-sm font-medium text-gray-700">
-              Email Frequency:
-            </label>
-            <select
-              id="frequency"
-              value={frequency}
-              onChange={(e) => setFrequency(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 bg-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            >
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-            </select>
-          </div>
-          <div className="mt-4">
-            <label htmlFor="numQuestions" className="block text-sm font-medium text-gray-700">
-              Number of Questions:
-            </label>
-            <input
-              type="number"
-              id="numQuestions"
-              value={numQuestions}
-              onChange={(e) => setNumQuestions(e.target.value)}
-              min="1"
-              className="mt-1 block w-full border border-gray-300 bg-white rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
           </div>
           <div className="flex flex-col items-center justify-between mt-6">
             <button type="submit" className="w-full px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">

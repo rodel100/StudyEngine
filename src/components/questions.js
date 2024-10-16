@@ -81,9 +81,13 @@ const App = () => {
     const fetchQuestions = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('http://localhost:8000/api/project/getQuestions/6707f2220511b299ed18daaf');
+        const response = await fetch('http://localhost:8000/api/project/getQuestions/6707f2220511b299ed18daaf', {
+          headers: {
+            'Authorization': `${localStorage.getItem('token')}`
+          }
+        });
         if (!response.ok) {
-          throw new Error('Failed to fetch questions');
+          
         }
         const data = await response.json();
         setQuestions(data);

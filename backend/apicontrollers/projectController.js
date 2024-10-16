@@ -7,8 +7,6 @@ import { uploadFile } from './getfile.js';
 import path from 'path';
 import { sendEmailToProjectMembers } from '../middleware/emailService.js';
 const projectController = express.Router();
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/')
@@ -122,9 +120,9 @@ projectController.delete('/delete/:id', authenticateToken, async (req, res) => {
     }
 });
 
-projectController.post('/sendEmails/:id', authenticateToken, async (req, res) => {
+projectController.post('/sendEmails/:id', async (req, res) => {
     const { id } = req.params;
-    const frontendUrl = `localhost:3000/project/questionaire/${id}`;
+    const frontendUrl = `http://localhost:3000/questions`;
     try {
         const project = await Project.findById(id);
 
@@ -135,10 +133,10 @@ projectController.post('/sendEmails/:id', authenticateToken, async (req, res) =>
         const { members, emailFrequency } = project;
 
         for (const member of members) {
-            const { email, name } = member;
-            const projectLink = `${frontendUrl}?email=${email}&name=${encodeURIComponent(name)}`;
+            const { Email, Name } = member;
+            const projectLink = `${frontendUrl}?email=${Email}&name=${encodeURIComponent(Name)}`;
 
-            await sendEmailToProjectMembers(email, name, projectLink, emailFrequency);
+            await sendEmailToProjectMembers(Email, Name, projectLink, emailFrequency);
         }
 
         res.status(200).send('Emails sent successfully to all project members');
@@ -154,7 +152,7 @@ projectController.get('/getQuestions/:id', authenticateToken, async (req, res) =
         if (!project) {
             return res.status(404).send('Project not found');
         }
-        const questions = project.Questions;
+        const questions = project.Questions[2].Question;
         const randomQuestions = [];
         for (let i = 0; i < 5; i++) {
             randomQuestions.push(questions[Math.floor(Math.random() * questions.length)]);
@@ -166,7 +164,7 @@ projectController.get('/getQuestions/:id', authenticateToken, async (req, res) =
 }
 )
 projectController.post('/addMembers/:id', authenticateToken, async (req, res) => {
-    const { members } = req.body; // Expecting an array of members with { Name, Email }
+    const { members } = req.body; 
     console.log(members);          
     if (!members || !Array.isArray(members)) {
         return res.status(400).send('Please provide an array of members with Name and Email.');
@@ -188,6 +186,7 @@ projectController.post('/addMembers/:id', authenticateToken, async (req, res) =>
         res.status(500).send('An error occurred while adding members.');
     }
 });
+
 
 
 
