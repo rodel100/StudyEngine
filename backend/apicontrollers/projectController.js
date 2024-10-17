@@ -7,8 +7,6 @@ import { uploadFile } from './getfile.js';
 import path from 'path';
 import { sendEmailToProjectMembers } from '../middleware/emailService.js';
 const projectController = express.Router();
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/')
@@ -122,9 +120,9 @@ projectController.delete('/delete/:id', authenticateToken, async (req, res) => {
     }
 });
 
-projectController.post('/sendEmails/:id', authenticateToken, async (req, res) => {
+projectController.post('/sendEmails/:id', async (req, res) => {
     const { id } = req.params;
-    const frontendUrl = "localhost:3000/project/questionaire";
+    const frontendUrl = `http://localhost:3000/questions`;
     try {
         const project = await Project.findById(id);
 
@@ -132,13 +130,13 @@ projectController.post('/sendEmails/:id', authenticateToken, async (req, res) =>
             return res.status(404).send('Project not found');
         }
 
-        const { studygroup, emailFrequency } = project;
+        const { members, emailFrequency } = project;
 
-        for (const member of studygroup) {
-            const { email, name } = member;
-            const projectLink = `${frontendUrl}?email=${email}&name=${encodeURIComponent(name)}`;
+        for (const member of members) {
+            const { Email, Name } = member;
+            const projectLink = `${frontendUrl}?email=${Email}&name=${encodeURIComponent(Name)}`;
 
-            await sendEmailToProjectMembers(email, name, projectLink, emailFrequency);
+            await sendEmailToProjectMembers(Email, Name, projectLink, emailFrequency);
         }
 
         res.status(200).send('Emails sent successfully to all project members');
@@ -154,7 +152,7 @@ projectController.get('/getQuestions/:id', authenticateToken, async (req, res) =
         if (!project) {
             return res.status(404).send('Project not found');
         }
-        const questions = project.Questions;
+        const questions = project.Questions[2].Question;
         const randomQuestions = [];
         for (let i = 0; i < 5; i++) {
             randomQuestions.push(questions[Math.floor(Math.random() * questions.length)]);
@@ -165,6 +163,55 @@ projectController.get('/getQuestions/:id', authenticateToken, async (req, res) =
     }
 }
 )
+projectController.post('/addMembers/:id', authenticateToken, async (req, res) => {
+    const { members } = req.body; 
+    console.log(members);          
+    if (!members || !Array.isArray(members)) {
+        return res.status(400).send('Please provide an array of members with Name and Email.');
+    }
+
+    try {
+        const project = await Project.findOne({ _id: req.params.id, creator: req.userid });
+        
+        if (!project) {
+            return res.status(404).send('Project not found or unauthorized.');
+        }
+        project.members.push(...members);
+        
+        await project.save();
+
+        res.status(200).send(`Members added successfully: ${members.map(member => member.Name).join(', ')}`);
+    } catch (err) {
+        console.error(`Error adding members: ${err}`);
+        res.status(500).send('An error occurred while adding members.');
+    }
+});
+///Remove members from the project
+projectController.post('/removeMembers/:id', authenticateToken, async (req, res) => {
+    const { members } = req.body;
+    if (!members || !Array.isArray(members)) {
+        return res.status(400).send('Please provide an array of members with Name and Email.');
+    }
+
+    try {
+        const project = await Project.findOne({ _id: req.params.id, creator: req.userid });
+
+        if (!project) {
+            return res.status(404).send('Project not found or unauthorized.');
+        }
+
+        project.members = project.members.filter(member => !members.some(m => m.Email === member.Email));
+
+        await project.save();
+
+        res.status(200).send(`Members removed successfully: ${members.map(member => member.Name).join(', ')}`);
+    } catch (err) {
+        console.error(`Error removing members: ${err}`);
+        res.status(500).send('An error occurred while removing members.');
+    }
+});
+
+
 
 
 export default projectController;

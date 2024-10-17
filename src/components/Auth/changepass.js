@@ -5,7 +5,7 @@ const ChangePasswordPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [token, setToken] = useState(''); // Assume token is passed via query params
+  const [token] = useState(''); // Assume token is passed via query params
 
   const handleChangePassword = async (event) => {
     event.preventDefault();
