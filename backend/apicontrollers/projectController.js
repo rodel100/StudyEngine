@@ -186,6 +186,30 @@ projectController.post('/addMembers/:id', authenticateToken, async (req, res) =>
         res.status(500).send('An error occurred while adding members.');
     }
 });
+///Remove members from the project
+projectController.post('/removeMembers/:id', authenticateToken, async (req, res) => {
+    const { members } = req.body;
+    if (!members || !Array.isArray(members)) {
+        return res.status(400).send('Please provide an array of members with Name and Email.');
+    }
+
+    try {
+        const project = await Project.findOne({ _id: req.params.id, creator: req.userid });
+
+        if (!project) {
+            return res.status(404).send('Project not found or unauthorized.');
+        }
+
+        project.members = project.members.filter(member => !members.some(m => m.Email === member.Email));
+
+        await project.save();
+
+        res.status(200).send(`Members removed successfully: ${members.map(member => member.Name).join(', ')}`);
+    } catch (err) {
+        console.error(`Error removing members: ${err}`);
+        res.status(500).send('An error occurred while removing members.');
+    }
+});
 
 
 
