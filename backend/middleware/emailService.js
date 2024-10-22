@@ -25,3 +25,19 @@ export const sendEmailToProjectMembers = async (email, name, projectLink, emailF
         console.error(`Error sending email to ${email}:`, error);
     }
 };
+
+export const sendEmailtoStudyGroup = async (email, name, emailContent, emailFrequency) => {
+    try {
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: `${name} ${emailFrequency} Quizzes`,
+            html: emailContent, // Custom email content with multiple quiz links
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log(`Email sent to ${email}`);
+    } catch (error) {
+        console.error(`Error sending email to ${email}:`, error);
+    }
+};

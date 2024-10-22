@@ -77,6 +77,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [projectid, setProjectid] = useState('');
+  const [studygroupID, setStudygroupID] = useState('');
+  const [email, setEmail] = useState('');
 
 
   useEffect(() => {
@@ -113,7 +115,11 @@ const App = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const name = searchParams.get('name');
     const projectid = searchParams.get('project');
+    const studygroupID = searchParams.get('studygroup');
+    const email = searchParams.get('email');
     setProjectid(projectid);
+    setStudygroupID(studygroupID);
+    setEmail(email);
     setUserName(name || 'User');
   }, []);
 
@@ -138,20 +144,50 @@ const App = () => {
     setUserAnswers(updatedAnswers);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!allAnswered) {
-      alert('Please answer all questions before submitting.');
-      return;
+        alert('Please answer all questions before submitting.');
+        return;
     }
+
     let newScore = 0;
     questions.forEach((question) => {
-      if (question.answer === userAnswers[question.id]) {
-        newScore += 1;
-      }
+        if (question.answer === userAnswers[question.id]) {
+            newScore += 1;
+        }
     });
     setScore(newScore);
     setShowResults(true);
-  };
+
+    const scoresData = [{
+        name: userName, 
+        email: email, 
+        score: newScore
+    }];
+
+    try {
+        const response = await fetch(`http://localhost:8000/api/studygroup/${studygroupID}/addscores`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({ scores: scoresData })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit scores');
+        }
+
+        const result = await response.json();
+        console.log('Scores submitted:', result);
+        alert('Your score has been successfully submitted!');
+    } catch (error) {
+        console.error('Error submitting score:', error);
+        alert('There was an error submitting your score. Please try again later.');
+    }
+};
+
 
   if (isLoading) {
     return <div>Loading questions...</div>;

@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
-
-const questionSchema = new mongoose.Schema({
-    answer: { type: String, required: true },
-    choices: { type: [String], required: true },
-    id: { type: Number, required: true, unique: true },
-    text: { type: String, required: true }
-});
+import Question from "./Question.js";
 
 const projectSchema = new mongoose.Schema({
     name: {
@@ -20,7 +14,7 @@ const projectSchema = new mongoose.Schema({
     studygroup: { type: mongoose.Schema.Types.ObjectId, ref: 'StudyGroup' },
     emailFrequency: String,
     NumberofQuestions: Number,
-    Questions: [{ Name: String, Question: [questionSchema]}]
+    Questions: [{ Name: String, Questions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}] }]
 });
 
 const Project = mongoose.model('Project', projectSchema);

@@ -6,6 +6,8 @@ import multer from 'multer';
 import { uploadFile } from './getfile.js';
 import path from 'path';
 import { sendEmailToProjectMembers } from '../middleware/emailService.js';
+import Question from '../models/Question.js';
+import { get } from 'http';
 const projectController = express.Router();
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -31,11 +33,14 @@ projectController.post('/create', authenticateToken, async (req, res) => {
         emailFrequency,
         NumberofQuestions
     });
+    if (studygroup == '') {
+        project.studygroup = null;
+    }
     try {
         await project.save();
         res.status(201).send(project);
     } catch (err) {
-        res.status(400).send(`req.body: ${req.userid}`);
+        res.status(400).send(`request failed: ${err}`);
     }
 });
 
@@ -67,13 +72,26 @@ projectController.post('/generateQuestions', upload.fields([{ name: 'project' },
             return res.status(400).send('Please upload a file and project');
         }
         const newProject = await Project.findById({ _id: project });
+        console.log(newProject)
         const questions = await uploadFile(file[0])
             .then(async (file) => { return await generateQuestions(file.filePath, newProject.NumberofQuestions); })
             .then(async (questions) => {
                 console.log(questions);
-                newProject.Questions.push({ Name: title, Question: questions })
+                const questionDocs = await Promise.all(questions.map(async (question) => {
+                    const newQuestion = new Question({
+                        text: question.text,
+                        choices: question.choices,
+                        answer: question.answer,
+                        id: question.id
+                    });
+                    await newQuestion.save();
+                    console.log(newQuestion._id);
+                    return newQuestion._id; // Return the ID of the saved question
+                }));
+                console.log(questionDocs);
+                newProject.Questions.push({ Name: title, Questions: questionDocs})
                 await newProject.save()
-                return questions;
+                return "Success"
             })
             .catch((err) => {
                 console.log(err);
@@ -129,16 +147,12 @@ projectController.post('/sendEmails/:id', async (req, res) => {
         if (!project) {
             return res.status(404).send('Project not found');
         }
-
         const { members, emailFrequency } = project;
-
         for (const member of members) {
             const { Email, Name } = member;
-            const projectLink = `${frontendUrl}?email=${Email}&name=${encodeURIComponent(Name)}`;
-
+            const projectLink = `${frontendUrl}?email=${Email}&name=${encodeURIComponent(Name)}&project=${id}`;
             await sendEmailToProjectMembers(Email, Name, projectLink, emailFrequency);
         }
-
         res.status(200).send('Emails sent successfully to all project members');
     } catch (err) {
         console.error(`Error sending emails: ${err}`);
@@ -152,32 +166,34 @@ projectController.get('/getQuestions/:id', authenticateToken, async (req, res) =
         if (!project) {
             return res.status(404).send('Project not found');
         }
-        const questions = project.Questions[2].Question;
+        const questions = project.Questions[project.Questions.length - 1];
         const randomQuestions = [];
+        const getQuestions = await Question.find({ _id: { $in: questions.Questions } });
         for (let i = 0; i < 5; i++) {
             randomQuestions.push(questions[Math.floor(Math.random() * questions.length)]);
         }
-        res.send(randomQuestions);
+        res.send(getQuestions);
     } catch (err) {
+        console.error(`Error getting questions: ${err}`);
         res.status(500).send(err);
     }
 }
 )
 projectController.post('/addMembers/:id', authenticateToken, async (req, res) => {
-    const { members } = req.body; 
-    console.log(members);          
+    const { members } = req.body;
+    console.log(members);
     if (!members || !Array.isArray(members)) {
         return res.status(400).send('Please provide an array of members with Name and Email.');
     }
 
     try {
         const project = await Project.findOne({ _id: req.params.id, creator: req.userid });
-        
+
         if (!project) {
             return res.status(404).send('Project not found or unauthorized.');
         }
         project.members.push(...members);
-        
+
         await project.save();
 
         res.status(200).send(`Members added successfully: ${members.map(member => member.Name).join(', ')}`);

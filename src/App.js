@@ -6,6 +6,7 @@ import Register from './components/Auth/register';
 import ForgetPassword from './components/Auth/forgotpass';
 import ChangePassword from './components/Auth/changepass';
 import Questions from './components/questions';
+import StudyGroupQuestions from './components/StudyGroupComponents/StudyGroupQuestions';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/change-password" element={<ChangePassword />} />
         <Route path="/questions" element={<Questions />} />
         <Route path="*" element={<Login />} />
+        <Route path="/studygroup-questions" element={<StudyGroupQuestions />} />
       </Routes>
     </Router>
   );

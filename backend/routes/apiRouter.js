@@ -4,6 +4,7 @@ import {getFile, uploadFile} from '../apicontrollers/getfile.js';
 import {generateQuestions} from '../apicontrollers/aiController.js';
 import multer from 'multer';
 import path from 'path';
+import { authenticateToken } from '../middleware/authenticateToken.js';
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -20,5 +21,4 @@ const upload = multer({ storage: storage })
 router.post('/uploadFile', upload.single('file') ,uploadFile);
 router.get('/getfile', getFile);
 router.get('/getQuestions', generateQuestions);
-
 export default router;

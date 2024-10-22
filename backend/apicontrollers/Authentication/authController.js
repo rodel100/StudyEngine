@@ -23,13 +23,13 @@ async function registerUser(req, res) {
       if (!req.body.username || !req.body.password) {
         return res.status(400).json({ message: 'Username and password are required' });
       }
-        const { username, password } = req.body;    
+        const { username, password, email, firstName, lastName } = req.body;    
       const existingUser = await User.findOne({ username });
       if (existingUser) {
         return res.status(400).json({ message: 'Username already exists' });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new User({ username: username, password: hashedPassword });
+      const user = new User({ username: username, password: hashedPassword, email: email, firstName: firstName, lastName: lastName});
       await user.save();
       
       res.json({ message: 'User registered successfully' });
