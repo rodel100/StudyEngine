@@ -2,10 +2,11 @@ import express from 'express';
 import mongoose from 'mongoose';
 import authRouter from './routes/authRouter.js';
 import apiRouter from './routes/apiRouter.js';
-import 'dotenv/config';
 import projectController from './apicontrollers/projectController.js';
 import studyGroupController from './apicontrollers/studyGroupController.js';
 import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const port = 8000;

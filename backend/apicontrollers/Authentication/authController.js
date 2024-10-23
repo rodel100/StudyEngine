@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import 'dotenv/config';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
