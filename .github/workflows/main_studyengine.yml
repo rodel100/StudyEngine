@@ -43,7 +43,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_22C7D0AC9D274A54A6EF99E2B6AEFFC0 }}
 
       - name: 'Deploy to Azure Web App'
-        id: Deploy backend to Azure App Service
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'studyengine'
