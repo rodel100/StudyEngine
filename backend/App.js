@@ -21,7 +21,7 @@ app.use(cors({
 app.use(express.json());
 
 // Local MongoDB connection
-mongoose.connect('mongodb://localhost:27017/StudyEngine')
+mongoose.connect(process.env.AZURE_COSMOS_CONNECTIONSTRING || 'mongodb://localhost:27017/StudyEngine')
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
