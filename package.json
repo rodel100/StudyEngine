@@ -28,7 +28,8 @@
   },
   "scripts": {
     "server": "nodemon --experimental-detect-module backend/App.js",
-    "start": "react-scripts start",
+    "start": "node backend/App.js",
+    "starts": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
