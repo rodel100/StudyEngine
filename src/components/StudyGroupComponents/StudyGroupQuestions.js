@@ -91,7 +91,7 @@ const App = () => {
     const fetchQuestions = async () => {
       try {
 
-        const response = await fetch(`http://localhost:8000/api/project/getQuestions/${projectid}`, {
+        const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000`) + `/api/project/getQuestions/${projectid}`, {
           headers: {
             'Authorization': `${localStorage.getItem('token')}`
           }
@@ -166,7 +166,7 @@ const App = () => {
     }];
 
     try {
-        const response = await fetch(`http://localhost:8000/api/studygroup/${studygroupID}/addscores`, {
+        const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000`) + `/api/studygroup/${studygroupID}/addscores`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

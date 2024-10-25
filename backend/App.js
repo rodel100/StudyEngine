@@ -6,6 +6,7 @@ import projectController from './apicontrollers/projectController.js';
 import studyGroupController from './apicontrollers/studyGroupController.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import authController from './apicontrollers/Authentication/authController.js';
 dotenv.config();
 
 const app = express();
@@ -13,7 +14,7 @@ const port = 8000;
 
 // Use cors middleware
 app.use(cors({
-  origin: 'http://localhost:3000', // Specify the allowed origin
+  origin: process.env.REACT_APP_FRONTEND_URL || 'http://localhost:5000', // Specify the allowed origin
   methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -39,8 +40,7 @@ mongoose.connect(process.env.AZURE_COSMOS_CONNECTIONSTRING || 'mongodb://localho
 //   .catch((err) => console.error(err));
 
 // Set up routers
-app.use('/auth', authRouter);
-app.use('/api', apiRouter);
+app.use('/auth', authController);
 app.use('/api/project', projectController);
 app.use('/api/studygroup', studyGroupController);
 
@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 });
 
 // Start the server
-app.listen(process.env.PORT || port, () => {
+app.listen(port, () => {
   if(process.env.PORT){
     console.log(`Server running on port ${process.env.PORT}`);
   }

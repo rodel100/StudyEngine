@@ -9,6 +9,8 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 
+const auth = express.Router();
+
 
 const SECRET_KEY = process.env.JSON_TOKEN_SECRET_KEY;
 
@@ -63,5 +65,7 @@ async function loginUser(req, res) {
     res.status(500).json({message: `Error for status, ${err}`});
   }
 }
+auth.post('/register', registerUser);
+auth.post('/login', loginUser);
 
-export {registerUser, loginUser};
+export default {auth};

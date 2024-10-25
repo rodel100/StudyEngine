@@ -11,7 +11,7 @@ const AddProjectModal = ({ handleCloseAddModal, setProjects, projects }) => {
                 description: newProjectDescription,
             };
             try {
-                const response = await fetch('http://localhost:8000/api/project/create', {
+                const response = await fetch((process.env.REACT_APP_BACKEND_URL ||  'http://localhost:8000') + '/api/project/create', {
                     method: 'POST',
                     headers: {
                         'Authorization': localStorage.getItem('token'),

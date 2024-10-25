@@ -9,7 +9,7 @@ const LoginPage = () => {
 
   const handleLogin = (event) => {
     event.preventDefault();
-    fetch(`http://localhost:8000/auth/login`, {
+    fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000`) + `/auth/login`, {
       mode: 'cors',
       method: 'POST',
       headers: {

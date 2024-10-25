@@ -12,7 +12,7 @@ const AddStudyGroupModal = ({ handleCloseAddModal, setStudyGroups, studyGroups }
                 projects: newStudyGroupProjects
             };
             try {
-                const response = await fetch('http://localhost:8000/api/studygroup/create', {
+                const response = await fetch((process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000') + '/api/studygroup/create', {
                     method: 'POST',
                     headers: {
                         'Authorization': localStorage.getItem('token'),
@@ -41,7 +41,7 @@ const AddStudyGroupModal = ({ handleCloseAddModal, setStudyGroups, studyGroups }
 
     const handleGetProjects = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/project/get', {
+            const response = await fetch((process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000') + '/api/project/get', {
                 headers: { 'Authorization': localStorage.getItem('token') }
             });
             const data = await response.json();

@@ -12,7 +12,6 @@ async function uploadFile(file) {
     try {
         if (!file) {
             return 'No file uploaded';
-            console.log('No file uploaded');
         }
         const newFile = new File({
             name: file.originalname,

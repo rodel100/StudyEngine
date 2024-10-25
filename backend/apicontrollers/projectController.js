@@ -3,11 +3,10 @@ import Project from '../models/Project.js';
 import { authenticateToken } from '../middleware/authenticateToken.js';
 import { generateQuestions } from './aiController.js';
 import multer from 'multer';
-import { uploadFile } from './getfile.js';
+import { uploadFile } from '../middleware/getfile.js';
 import path from 'path';
 import { sendEmailToProjectMembers } from '../middleware/emailService.js';
 import Question from '../models/Question.js';
-import { get } from 'http';
 const projectController = express.Router();
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -86,7 +85,7 @@ projectController.post('/generateQuestions', upload.fields([{ name: 'project' },
                     });
                     await newQuestion.save();
                     console.log(newQuestion._id);
-                    return newQuestion._id; // Return the ID of the saved question
+                    return newQuestion._id;
                 }));
                 console.log(questionDocs);
                 newProject.Questions.push({ Name: title, Questions: questionDocs})
@@ -140,7 +139,7 @@ projectController.delete('/delete/:id', authenticateToken, async (req, res) => {
 
 projectController.post('/sendEmails/:id', async (req, res) => {
     const { id } = req.params;
-    const frontendUrl = `http://localhost:3000/questions`;
+    const frontendUrl = process.env.REACT_APP_FRONTEND_URL || `http://localhost:3000/questions`;
     try {
         const project = await Project.findById(id);
 

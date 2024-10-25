@@ -21,7 +21,7 @@ const GenerateQuestions = ({ setIsGenerateQuestionsPage, selectedProject }) => {
         formData.append('title', title);
 
         try {
-            const response = await fetch(`http://localhost:8000/api/project/generateQuestions`, {
+            const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000`) + `/api/project/generateQuestions`, {
                 method: 'POST',
                 headers: { 'Authorization': localStorage.getItem('token') },
                 body: formData,

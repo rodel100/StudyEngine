@@ -10,7 +10,7 @@ const StudyGroupModal = ({ selectedStudyGroup, handleCloseModal }) => {
         if (newMemberName && newMemberEmail) {
             const newMember = { name: newMemberName, email: newMemberEmail }; // Use lowercase keys for consistency
             try {
-                const response = await fetch(`http://localhost:8000/api/studygroup/addmember/${selectedStudyGroup._id}`, {
+                const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000`) + `/api/studygroup/addmember/${selectedStudyGroup._id}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': localStorage.getItem('token'),
@@ -36,7 +36,7 @@ const StudyGroupModal = ({ selectedStudyGroup, handleCloseModal }) => {
 
     const handleSendEmails = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/studygroup/sendemails/${selectedStudyGroup._id}`, {
+            const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000`) + `/api/studygroup/sendemails/${selectedStudyGroup._id}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': localStorage.getItem('token'),

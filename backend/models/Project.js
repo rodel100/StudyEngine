@@ -12,8 +12,8 @@ const projectSchema = new mongoose.Schema({
     endpoints: [{ type: String }],
     files: [{ type: mongoose.Schema.Types.ObjectId, ref: 'File' }],
     studygroup: { type: mongoose.Schema.Types.ObjectId, ref: 'StudyGroup' },
-    emailFrequency: String,
-    NumberofQuestions: Number,
+    emailFrequency: {type:String, default: 'daily'},
+    NumberofQuestions: {type: Number, default: 30},
     Questions: [{ Name: String, Questions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Question'}] }]
 });
 

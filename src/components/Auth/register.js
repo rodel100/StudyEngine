@@ -21,7 +21,7 @@ const RegistrationPage = () => {
     if (isUsernameValid && isPasswordValid) {
       try {
         // If both validations pass, handle the registration logic
-        const response = await fetch(`http://localhost:8000/auth/register`, {
+        const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000`) + `/auth/register`, {
           mode: 'cors',
           method: 'POST',
           headers: {
