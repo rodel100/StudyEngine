@@ -68,4 +68,4 @@ async function loginUser(req, res) {
 auth.post('/register', registerUser);
 auth.post('/login', loginUser);
 
-export default {auth};
+export default auth;

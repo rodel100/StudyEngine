@@ -1,7 +1,5 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import authRouter from './routes/authRouter.js';
-import apiRouter from './routes/apiRouter.js';
 import projectController from './apicontrollers/projectController.js';
 import studyGroupController from './apicontrollers/studyGroupController.js';
 import cors from 'cors';
