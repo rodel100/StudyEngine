@@ -8,7 +8,7 @@
       "methods": [
         "get"
       ],
-      "headers": {}
+      "rewrite": "/index.html"
     }
   ]
 }
