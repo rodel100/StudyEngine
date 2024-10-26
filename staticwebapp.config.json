@@ -6,9 +6,6 @@
     },
     {
       "route": "/questions",
-      "methods": [
-        "get"
-      ],
       "rewrite": "/index.html"
     },
     {
