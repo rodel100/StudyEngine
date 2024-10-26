@@ -32,7 +32,7 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "build" # Built app content directory - optional
         env:
-          REACT_APP_FRONTEND_URL: "https://studyengine.azurewebsites.net"
+          REACT_APP_BACKEND_URL: "https://studyengine.azurewebsites.net"
           ###### End of Repository/Build Configurations ######
         
 
