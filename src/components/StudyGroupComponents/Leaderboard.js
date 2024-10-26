@@ -3,11 +3,11 @@ import { Trophy, Users } from "lucide-react";
 
 const Leaderboard = () => {
   const [sortedScores, setSortedScores] = useState([]);
-  const searchParams = new URLSearchParams(window.location.search);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
+        const searchParams = new URLSearchParams(window.location.search);
         const studygroupID = searchParams.get('studygroup');
         const response = await fetch(
           (process.env.REACT_APP_BACKEND_URL || "http://localhost:8000") +
