@@ -1,16 +1,1 @@
-{
-  "routes": [
-    {
-      "route": "/dashboard",
-      "rewrite": "/index.html"
-    },
-    {
-      "route": "/questions",
-      "rewrite": "/index.html"
-    },
-    {
-      "route": "/*",
-      "rewrite": "/index.html"
-    }
-  ]
-}
+{}
