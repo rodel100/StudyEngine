@@ -1,7 +1,8 @@
 {
   "routes": [
     {
-      "route": "/dashboard"
+      "route": "/dashboard",
+      "rewrite": "/index.html"
     },
     {
       "route": "/questions",
