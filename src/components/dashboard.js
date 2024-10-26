@@ -21,7 +21,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/project/get', {
+                const response = await fetch(( process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000' )+ '/api/project/get', {
                     headers: { 'Authorization': localStorage.getItem('token') }
                 });
                 const data = await response.json();
@@ -36,7 +36,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchStudyGroups = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/studygroup/get', {
+                const response = await fetch((process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000') + '/api/studygroup/get', {
                     headers: { 'Authorization': localStorage.getItem('token') }
                 });
                 const data = await response.json();
