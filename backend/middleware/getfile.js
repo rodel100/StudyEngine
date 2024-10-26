@@ -8,21 +8,6 @@ const fileSchema = new mongoose.Schema({
 });
 
 const File = mongoose.model('File', fileSchema);
-async function uploadFile(file) {
-    try {
-        if (!file) {
-            return 'No file uploaded';
-        }
-        const newFile = new File({
-            name: file.originalname,
-            filePath: file.path
-        });
-        await newFile.save();
-        return newFile;
-      } catch (err) {
-        return err;
-    }
-};
 
 async function getFile() {
     try {
@@ -38,5 +23,3 @@ async function getFile() {
         return err;
     }
 }
-
-export {uploadFile, getFile}

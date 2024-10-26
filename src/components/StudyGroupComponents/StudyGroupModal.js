@@ -54,7 +54,13 @@ const StudyGroupModal = ({ selectedStudyGroup, handleCloseModal }) => {
             console.error('Error sending emails:', error);
         }
     };
-
+    const handleLeaderboards = async () => {
+        try {
+            window.location.href = `/leaderboard?studygroup=${selectedStudyGroup._id}`;
+        } catch (error) {
+            console.error('Unable to find leaderboard');
+        }
+    }
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -75,6 +81,9 @@ const StudyGroupModal = ({ selectedStudyGroup, handleCloseModal }) => {
                         className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
                     >
                         Send Emails
+                    </button>
+                    <button onClick={handleLeaderboards} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                        Leaderboards
                     </button>
                 </div>
                 <button onClick={handleCloseModal} className="mt-4 text-red-500 hover:underline">Close</button>

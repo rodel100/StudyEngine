@@ -99,7 +99,7 @@ studyGroupController.post('/:id/addscores', authenticateToken, async (req, res) 
         await studyGroup.save();
         res.send(studyGroup);
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).send();
     }
 });
 
@@ -108,7 +108,6 @@ studyGroupController.get('/:id/leaderboard', authenticateToken, async (req, res)
     try {
         const studyGroup = await StudyGroup.findById(req.params.id);
         if (!studyGroup) return res.status(404).send('Study Group not found');
-
         // Sort scores by score in descending order
         const leaderboard = studyGroup.scores.sort((a, b) => b.score - a.score);
         res.send(leaderboard);
@@ -132,7 +131,8 @@ studyGroupController.post('/addmember/:id', authenticateToken, async (req, res) 
 
 studyGroupController.post('/sendemails/:id', async (req, res) => {
     const { id } = req.params;
-    const frontendUrl = `http://localhost:3000/studygroup-questions`;
+    const frontendUrl = (process.env.REACT_APP_FRONTEND_URL || `http://localhost:3000`) +`/studygroup-questions`;
+    const leaderboardUrl = (process.env.REACT_APP_FRONTEND_URL || `http://localhost:3000`) +`/leaderboard?studygroup=${id}`;
 
     try {
         // Find the study group by ID
@@ -158,6 +158,8 @@ studyGroupController.post('/sendemails/:id', async (req, res) => {
                 <h1>Hello ${name},</h1>
                 <p>You have quizzes to complete for the following projects:</p>
                 <ul>${projectLinks}</ul>
+
+                <p>Click <a href="${leaderboardUrl}">here</a> to view the leaderboard.</p>
             `;
            
             await sendEmailtoStudyGroup(email, name, emailContent, 'Weekly');

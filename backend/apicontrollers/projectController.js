@@ -3,14 +3,18 @@ import Project from '../models/Project.js';
 import { authenticateToken } from '../middleware/authenticateToken.js';
 import { generateQuestions } from './aiController.js';
 import multer from 'multer';
-import { uploadFile } from '../middleware/getfile.js';
 import path from 'path';
 import { sendEmailToProjectMembers } from '../middleware/emailService.js';
 import Question from '../models/Question.js';
+import dotenv from 'dotenv';
+import os from 'os';
+import fs from 'fs';
+dotenv.config();
 const projectController = express.Router();
+const storageLocation = os.platform() === 'win32' ? 'uploads/' : '/tmp';
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/')
+        cb(null, storageLocation)
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
@@ -70,10 +74,10 @@ projectController.post('/generateQuestions', upload.fields([{ name: 'project' },
         if (!file || !project) {
             return res.status(400).send('Please upload a file and project');
         }
+        console.log(file);
         const newProject = await Project.findById({ _id: project });
         console.log(newProject)
-        const questions = await uploadFile(file[0])
-            .then(async (file) => { return await generateQuestions(file.filePath, newProject.NumberofQuestions); })
+        const questions = await generateQuestions(file[0].path, newProject.NumberofQuestions)
             .then(async (questions) => {
                 console.log(questions);
                 const questionDocs = await Promise.all(questions.map(async (question) => {
@@ -91,6 +95,8 @@ projectController.post('/generateQuestions', upload.fields([{ name: 'project' },
                 newProject.Questions.push({ Name: title, Questions: questionDocs})
                 await newProject.save()
                 return "Success"
+            }).finally(() => {
+                fs.unlinkSync(file[0].path);
             })
             .catch((err) => {
                 console.log(err);
@@ -139,7 +145,7 @@ projectController.delete('/delete/:id', authenticateToken, async (req, res) => {
 
 projectController.post('/sendEmails/:id', async (req, res) => {
     const { id } = req.params;
-    const frontendUrl = process.env.REACT_APP_FRONTEND_URL || `http://localhost:3000/questions`;
+    const frontendUrl = (process.env.REACT_APP_FRONTEND_URL || `http://localhost:3000`) + '/questions';
     try {
         const project = await Project.findById(id);
 

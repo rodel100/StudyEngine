@@ -38,7 +38,7 @@ const ProjectModal = ({ selectedProject, handleCloseModal, isGenerateQuestionsPa
     const handleSendEmails = async () => {
         try {
             console.log(selectedProject._id);
-            const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000/`) + `api/project/sendEmails/${selectedProject._id}`, {
+            const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000`) + `/api/project/sendEmails/${selectedProject._id}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': localStorage.getItem('token')

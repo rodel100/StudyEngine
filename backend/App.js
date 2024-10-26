@@ -5,14 +5,15 @@ import studyGroupController from './apicontrollers/studyGroupController.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authController from './apicontrollers/Authentication/authController.js';
+import os from 'os';
 dotenv.config();
 
 const app = express();
-const port = 8000;
+const port = process.env.port || 8000;
 
 // Use cors middleware
 app.use(cors({
-  origin: process.env.REACT_APP_FRONTEND_URL || 'http://localhost:5000', // Specify the allowed origin
+  origin: process.env.REACT_APP_FRONTEND_URL || 'http://localhost:3000', // Specify the allowed origin
   methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -47,7 +48,7 @@ app.get('/', (req, res) => {
 });
 
 // Start the server
-app.listen(process.env.PORT || port, () => {
+app.listen(port, () => {
   if(process.env.PORT){
     console.log(`Server running on port ${process.env.PORT}`);
   }
