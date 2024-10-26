@@ -1,5 +1,6 @@
 import '../../index.css';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const RegistrationPage = () => {
   const [username, setUserName] = useState('');
