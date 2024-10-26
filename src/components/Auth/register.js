@@ -12,6 +12,7 @@ const RegistrationPage = () => {
   const [lastname, setLastName] = useState('');
   const [firstnameError, setFirstNameError] = useState('');
   const [lastnameError, setLastNameError] = useState('');
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleRegistration = async (event) => {
     event.preventDefault(); // Prevent form submission if validation fails
@@ -38,7 +39,7 @@ const RegistrationPage = () => {
         const data = await response.json();
         console.log('Success:', data);
         window.alert('User registered successfully');
-        window.location.href = '/';
+        navigate('/login');
       } catch (error) {
         // Handle fetch errors and display meaningful messages
         console.error('Error:', error.message);
