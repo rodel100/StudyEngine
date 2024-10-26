@@ -89,7 +89,7 @@ const App = () => {
     const fetchQuestions = async () => {
       try {
 
-        const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000/`) +`api/project/getQuestions/${projectid}`, {
+        const response = await fetch((process.env.REACT_APP_BACKEND_URL || `http://localhost:8000`) +`/api/project/getQuestions/${projectid}`, {
           headers: {
             'Authorization': `${localStorage.getItem('token')}`
           }
